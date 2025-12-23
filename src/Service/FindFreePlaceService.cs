@@ -2,24 +2,20 @@
 
 namespace Magazine_WPF.Service
 {
-    public class FindFreePlaceService : IService
+    /// <summary>
+    /// Stateless service that finds and marks a free place for a given magazine.
+    /// </summary>
+    public class FindFreePlaceService : IFindFreePlaceService
     {
-        private readonly IMagazine reciever;
-        private int freePlace;
-
-        public FindFreePlaceService(IMagazine reciever) {
-            this.reciever = reciever;
-        }
-
-        public int FreePlace { get => freePlace; set => freePlace = value; }
-
-        public void Execute()
+        public int FindAndOccupy(IMagazine magazine)
         {
-            var places = reciever.Places;
-            var rot = reciever.IsRotary;
-            var neededPlaces = reciever.NeededPlaces;
-            freePlace = reciever.FindFreePlace(places, rot, neededPlaces);
-            reciever.UpdatePossitionsOccupancy(freePlace);
+            var places = magazine.Places;
+            var rot = magazine.IsRotary;
+            var neededPlaces = magazine.NeededPlaces;
+
+            var freePlace = magazine.FindFreePlace(places, rot, neededPlaces);
+            magazine.UpdatePossitionsOccupancy(freePlace);
+            return freePlace;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Magazine_WPF.ViewModel
     public class MagazineViewModel : INotifyPropertyChanged
     {
         private Magazine magazine;
-        private FindFreePlaceService findFreePlaceService;
+        private readonly IFindFreePlaceService findFreePlaceService;
         private int positionCount;
         private bool isRotary;
         private int neededPlaces;
@@ -26,8 +26,10 @@ namespace Magazine_WPF.ViewModel
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public MagazineViewModel()
+        public MagazineViewModel(IFindFreePlaceService findFreePlaceService)
         {
+            this.findFreePlaceService = findFreePlaceService;
+
             // Initialize default values
             positionCount = Magazine.PLACES_AVAILABLE_DEFAULT;
             isRotary = false;
@@ -36,7 +38,7 @@ namespace Magazine_WPF.ViewModel
 
             // Create model and service
             magazine = Magazine.GetInstance(positionCount, isRotary, true);
-            findFreePlaceService = new FindFreePlaceService(magazine);
+            magazine.NeededPlaces = neededPlaces;
             
             magazine.UpdatePositionsVisibility();
 
@@ -118,7 +120,7 @@ namespace Magazine_WPF.ViewModel
         {
             // Create a new magazine instance with current settings
             magazine = Magazine.GetInstance(PositionCount, IsRotary, true);
-            findFreePlaceService = new FindFreePlaceService(magazine);
+            magazine.NeededPlaces = NeededPlaces;
             magazine.UpdatePositionsVisibility();
             
             // Update view
@@ -127,8 +129,8 @@ namespace Magazine_WPF.ViewModel
 
         private void ExecuteFindFreePlace()
         {
-            findFreePlaceService.Execute();
-            LastFoundPosition = findFreePlaceService.FreePlace;
+            magazine.NeededPlaces = NeededPlaces;
+            LastFoundPosition = findFreePlaceService.FindAndOccupy(magazine);
 
             if (LastFoundPosition == -1)
             {
@@ -140,7 +142,7 @@ namespace Magazine_WPF.ViewModel
 
         #region INotifyPropertyChanged Implementation
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -9,11 +9,11 @@ namespace Magazine_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MagazineViewModel viewModel)
         {
             InitializeComponent();
-            // Set DataContext to ViewModel (not the Model)            
-            this.DataContext = new MagazineViewModel();
+            // Set DataContext to ViewModel (resolved via DI)
+            DataContext = viewModel;
         }
     }
 }
