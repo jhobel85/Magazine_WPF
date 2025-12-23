@@ -1,0 +1,130 @@
+﻿ <Window x:Class="Magazine_Conveyor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Magazine_Conveyor="clr-namespace:Magazine_Conveyor" d:DataContext="{d:DesignInstance Type=Magazine_Conveyor:Magazine}"
+        mc:Ignorable="d"
+        Title="Conveyor Custom Magazine" Height="450" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Magazine_Conveyor:ParametrizedBooleanToVisibilityConverter x:Key="ParametrizedBooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Height="400" Grid.Row="0" Grid.Column="0" Margin="5,0,0,0" VerticalAlignment="Top">
+            <Label Content="Select postitions:"/>
+            <TextBox x:Name="txtPositions" Text="{Binding PositionCount}" HorizontalAlignment="Left" Width="50"/>
+            <Button x:Name="btnAddMagazine" Margin="0,5,0,0"  HorizontalAlignment="Left" Click="btnAddMagazine_Click">Update magazine</Button>
+            <CheckBox x:Name="chbRotary" IsChecked="{Binding IsRotary}" Content="Is Rotary" HorizontalAlignment="Left"/>
+            <Label Content="Needed places:"/>
+            <TextBox x:Name="txtNeededPlaces" Text="{Binding NeededPlaces}" HorizontalAlignment="Left" Width="50"/>
+            <Button x:Name="btnNeededPlace" Margin="0,5,0,0"  HorizontalAlignment="Left" Click="btnNeededPlace_Click">Find free possition</Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <Grid  x:Name="linearRect" Visibility="{Binding IsRotary, Converter={StaticResource ParametrizedBooleanToVisibilityConverter}, ConverterParameter=False}">
+                
+                <ItemsControl ItemsSource="{Binding Positions}" Margin="0,0,0,10">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Positions.Count}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="10" Height="20" Fill="Red"
+      Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding Positions}" Margin="0,20,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Positions.Count}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="25" Height="25" Fill="Blue"
+      Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding Positions}" Margin="0,20,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Positions.Count}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Width="15" Height="15" 
+      Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+       IsChecked="{Binding IsChecked}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+    </StackPanel>
+
+    <Grid Grid.Row="0" Grid.Column="1" x:Name="circleRect" Visibility="{Binding IsRotary, Converter={StaticResource ParametrizedBooleanToVisibilityConverter}}">
+
+            <ItemsControl ItemsSource="{Binding Positions}" Margin="5,0,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Magazine_Conveyor:CircularPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Width="10" Height="25" Fill="Red" Margin="0,-10,0,0"
+      Visibility="{Binding IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding Positions}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Magazine_Conveyor:CircularPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Width="15" Height="15" Fill="Blue"
+Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding Positions}" Margin="0,0,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Magazine_Conveyor:CircularPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Width="15" Height="15" 
+      Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+       IsChecked="{Binding IsChecked}" Margin="0,0,0,0" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</Window>

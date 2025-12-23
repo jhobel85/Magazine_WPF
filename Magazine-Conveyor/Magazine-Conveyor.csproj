@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>Magazine_Conveyor</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="doc\**" />
+    <Compile Remove="tests\**" />
+    <EmbeddedResource Remove="doc\**" />
+    <EmbeddedResource Remove="tests\**" />
+    <None Remove="doc\**" />
+    <None Remove="tests\**" />
+    <Page Remove="doc\**" />
+    <Page Remove="tests\**" />
+  </ItemGroup>
+
+</Project>
